@@ -21,4 +21,17 @@ class ApprovalPendingSerializer(serializers.ModelSerializer):
             )
         depth=1
 
-    
+
+class EntityPendingSerializer(serializers.ModelSerializer):
+    approver_id = serializers.JSONField()
+
+    class Meta:
+        model = ApprovalPending
+        fields = (
+        "id",
+        "approval_entity",
+        # "approval_pending_entity",
+        "sequence_number",
+        "approver_id",
+        "status"
+        )

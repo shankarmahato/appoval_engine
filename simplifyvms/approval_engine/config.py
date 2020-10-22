@@ -156,11 +156,6 @@ def get_approval_value(rule_set, query_obj):
                                 supervisor_id = user['supervisor_id']
                                 user_list.append(supervisor_id)
             
-            # user_objs = []
-            # for user_id in user_list:
-            #     user_objs.append(get_user(settings.PROFILE_ENDPOINT, user_id))
             return user_list
 
-
-# get_approval_value(approval_rule_set, job)
 

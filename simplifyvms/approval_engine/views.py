@@ -3,9 +3,15 @@ from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from approval_engine.serializers import ApprovalPendingSerializer,ApprovalEntitySerializer
+from approval_engine.serializers import ApprovalPendingSerializer,ApprovalEntitySerializer, EntityPendingSerializer
 from .models import ApprovalPending, ApprovalEntity
 from django.http import Http404
+from .config import get_user
+from django.conf import settings
+import json
+from django.http import JsonResponse
+from django.core import serializers
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -171,5 +177,13 @@ class ApprovalPendingView(APIView):
                         status=status.HTTP_400_BAD_REQUEST)
 
 
-            
 
+class EntityPendingView(APIView):
+    def get(self, request, *args, **kwargs):
+        entity_id = self.kwargs['entity_id']
+        objs = ApprovalPending.objects.filter(approval_entity=entity_id, status='pending')
+        for obj in objs:
+            user_obj = get_user(settings.PROFILE_ENDPOINT, obj.approver_id)
+            obj.approver_id =  user_obj
+        serializer = EntityPendingSerializer(objs, many=True)
+        return Response(serializer.data)

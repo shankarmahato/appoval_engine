@@ -1,0 +1,16 @@
+asgiref==3.2.10
+Django==3.1.2
+django-stomp==4.2.0
+djangorestframework==3.12.1
+docopt==0.6.2
+json-logic==0.6.3
+mysqlclient==2.0.1
+pkg-resources==0.0.0
+pycodestyle==2.6.0
+pytz==2020.1
+PyYAML==5.3.1
+request-id-django-log==0.1.1
+six==1.15.0
+sqlparse==0.4.1
+stomp.py==6.1.0
+tenacity==6.2.0

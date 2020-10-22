@@ -14,12 +14,12 @@ approval_config = {
                 "operator": "graterthen",
                 "column_value_type": "static",
             },
-            {
-                "column": "created_by",
-                "columne_value": "Hiring Manager",
-                "operator": "equal",
-                "column_value_type": "role",
-            },
+            # {
+            #     "column": "created_by",
+            #     "columne_value": "Implementation Manager",
+            #     "operator": "equal",
+            #     "column_value_type": "role",
+            # },
         ],
         "actions": [
             {

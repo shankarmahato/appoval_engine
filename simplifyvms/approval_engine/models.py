@@ -1,4 +1,5 @@
 from django.db import models
+from django_mysql.models import JSONField
 import uuid
 
 STATUS = (
@@ -15,7 +16,7 @@ class ApprovalEntity(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     entity_name = models.CharField(max_length=100)
     entity_id = models.CharField(max_length=100, db_index=True)
-    entity_obj = models.JSONField()
+    entity_obj = JSONField()
 
     def __str__(self):
         '''

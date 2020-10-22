@@ -1,7 +1,8 @@
 DEFAULT:
     DEBUG: false
     PROFILE_ENDPOINT : 'https://dev-services.simplifyvms.com/profile-manager/users/'
-    HIRARCHY_ENDPOINT: 'https://dev-services.simplifyvms.com/configurator/'
+    HIRARCHY_ROLE_ENDPOINT: 'https://dev-services.simplifyvms.com/configurator/'
+    SENDER_ENDPOINT: 'http://dev-awsnlb.simplifyvms.com:8001/api/notification/email'
     SECRET_KEY: '826#d=f04sl^%m0*o1obrz-t7mp2$i@uxh)j%a1oos)mq@wso2'
     STATIC_URL: '/static/'
     LOGGING:
@@ -19,8 +20,8 @@ DEFAULT:
             OPTIONS:
                 host: '127.0.0.1'
                 port: 3306
-                user: 'shankar'
-                password: 'shankar@123'
+                user: 'root'
+                password: 'root'
                 db: 'svms_approval'
                 charset: 'utf8mb4'
                 init_command: "SET sql_mode='STRICT_TRANS_TABLES'"

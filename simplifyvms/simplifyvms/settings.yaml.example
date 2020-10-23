@@ -1,0 +1,62 @@
+DEFAULT:
+    DEBUG: false
+    PROFILE_ENDPOINT : 'https://dev-services.simplifyvms.com/profile-manager/users/'
+    HIRARCHY_ROLE_ENDPOINT: 'https://dev-services.simplifyvms.com/configurator/'
+    SENDER_ENDPOINT: 'http://dev-awsnlb.simplifyvms.com:8001/api/notification/email'
+    SECRET_KEY: '826#d=f04sl^%m0*o1obrz-t7mp2$i@uxh)j%a1oos)mq@wso2'
+    STATIC_URL: '/static/'
+    LOGGING:
+        HANDLERS_CONSOLE_LEVEL: DEBUG
+        LOGGERS_DEFAULT_LEVEL: DEBUG
+    LOGGING_HANDLER: 'console'
+
+    REST_FRAMEWORK:
+        DEFAULT_FILTER_BACKENDS: [
+            'django_filters.rest_framework.DjangoFilterBackend']
+
+    DATABASES:
+        default:
+            ENGINE: 'django.db.backends.mysql'
+            OPTIONS:
+                host: '172.17.0.2'
+                port: 3306
+                user: 'root'
+                password: 'root'
+                db: 'svms_approval'
+                charset: 'utf8mb4'
+                init_command: "SET sql_mode='STRICT_TRANS_TABLES'"
+    STOMP:
+        SERVER_HOST: 'localhost'
+        SERVER_PORT: 61613
+        USE_SSL: false
+        CORRELATION_ID_REQUIRED: false
+        PROCESS_MSG_ON_BACKGROUND: true
+        USERNAME: admin
+        PASSWORD: admin
+
+LOCAL:
+    DEBUG: true
+    # Add whitelisted domains and email addresses below.
+    QUALIFIED_DOMAINS : []
+    QUALIFIED_EMAILS : []
+
+
+DEV:
+    # Add whitelisted domains and email addresses below.
+    DEBUG: true
+    QUALIFIED_DOMAINS : ['gmail.com', 'simplifyvms.com', 'yopmail.com']
+    QUALIFIED_EMAILS : ['shankar@simplifyvms.com']
+    LOGGING_HANDLER: 'console'
+    AWS:
+        AWS_REGION: us-east-1
+        AWS_SECRET_NAME: 'dev/rds/approval'
+
+
+PRODUCTION:
+    LOGGING:
+        HANDLERS_CONSOLE_LEVEL: INFO
+        LOGGERS_DEFAULT_LEVEL:  INFO
+    LOGGING_HANDLER: 'file'
+    AWS:
+        AWS_REGION: us-east-1
+        AWS_SECRET_NAME: 'prod/rds/approval'

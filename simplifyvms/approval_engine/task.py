@@ -43,7 +43,7 @@ def submit_approval(payload: Payload) -> None:
     """
     my_header = payload.headers
     approval_args = payload.body
-    entity_name = approval_args['module']
+    entity_name = approval_args['module'].lower()
     entity_obj = approval_args['data']
     entity_id = entity_obj['id']
 

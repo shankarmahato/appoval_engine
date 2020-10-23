@@ -105,6 +105,8 @@ INSTALLED_APPS = [
     # rest_framework
     'rest_framework',
 
+    'drf_yasg',
+
     'django_filters',
 
     # stomp client
@@ -193,8 +195,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = CONFIG['STATIC_URL']
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 # STOMP Configurations
 STOMP_SERVER_HOST = CONFIG["STOMP"]["SERVER_HOST"]
@@ -206,3 +209,6 @@ STOMP_SERVER_USER = CONFIG["STOMP"]["USERNAME"]
 STOMP_SERVER_PASSWORD = CONFIG["STOMP"]["PASSWORD"]
 
 
+ENDPOINTS = {
+        'job': ''
+}

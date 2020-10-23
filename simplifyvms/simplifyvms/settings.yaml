@@ -1,5 +1,8 @@
 DEFAULT:
     DEBUG: false
+    AUTH_TOKEN_ENDPOINT : "https://dev-services.simplifyvms.com/authenticate"
+    AUTH_TOKEN_USERNAME: "simplifyvms.superadmin@simplifyvms.info"
+    AUTH_TOKEN_PASSWORD: "demo@1234"
     PROFILE_ENDPOINT : 'https://dev-services.simplifyvms.com/profile-manager/users/'
     HIRARCHY_ROLE_ENDPOINT: 'https://dev-services.simplifyvms.com/configurator/'
     SENDER_ENDPOINT: 'http://dev-awsnlb.simplifyvms.com:8001/api/notification/email'

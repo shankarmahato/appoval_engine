@@ -5,15 +5,25 @@ import requests
 
 logger = settings.LOGGER
 
-job = {
-    'id': 1,
-    'program_id': 'ccc2a4cb-d947-4dca-8d11-9295a5d81afe', 
-    "amount": 7000,
-    "created_by": "ff93edf5-376c-4bf2-bc06-d3e8b6ad1aca",
-    "Implementation Manager": "990b0e98-0561-411e-aa65-51ad8023a3f4",
-    "Hiring Manager": "ff93edf5-376c-4bf2-bc06-d3e8b6ad1aca",
-    "HR": "ff93edf5-376c-4bf2-bc06-d3e8b6ad1aca"
-}
+
+def get_auth_token(username, password):
+    """
+    Function will return the token based on the username and
+    password provided.
+    """
+    payload = {
+        "username": username,
+        "password": password
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    auth_token_obj = requests.post(
+        settings.AUTH_TOKEN_ENDPOINT,
+        data=json.dumps(payload),
+        headers=headers
+        )
+    return auth_token_obj.json()['token']
 
 
 def get_flag_value(operator, operand1, operand2):
@@ -22,9 +32,9 @@ def get_flag_value(operator, operand1, operand2):
     provided.
     """
     switcher = { 
-        "equal": lambda operand1, operand2: True if(operand1 == operand2) else False, 
-        "lessthen":lambda operand1, operand2: True if(operand1 < operand2) else False, 
-        "graterthen": lambda operand1, operand2: True if(operand1 > operand2) else False 
+        "equal": lambda operand1, operand2: True if(operand1 == operand2) else False,
+        "lessthen": lambda operand1, operand2: True if(operand1 < operand2) else False,
+        "graterthen": lambda operand1, operand2: True if(operand1 > operand2) else False
     } 
     flag = switcher.get(operator)
     return flag(operand1, operand2)
@@ -32,7 +42,7 @@ def get_flag_value(operator, operand1, operand2):
 
 def get_user(endpoint, id):
     """
-    Function to find the email based on the uuid provided.
+    Function to find the user based on the uuid provided.
     """
     url = '{}{}'.format(endpoint, id)
     user_obj = requests.get(url)
@@ -43,8 +53,13 @@ def get_hirarchy_role(endpoint, program_id, member_id):
     """
     functions to find the list of the user with the levels provided
     """
-    token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJTaW1wbGlmeVZNUyIsImF1ZCI6InNlcnZpY2VzLnNpbXBsaWZ5dm1zLmNvbSIsInN1YiI6IjJiZjQ0OWE5LTY2YWMtNGQ0Yi05NmUxLTE2NGEzOTZjYTliYiIsImlhdCI6MTYwMjY3MzE5NSwiZXhwIjoxNjA1MTU5NTk1fQ.ItSYH3n_yEqTtBg-tdlK26ii1m6RXT-lhNL-A4dfNlrDsQnY9uCFP_BZX-mAZTN_s4Qz-5LPvQ4BGwqxOxMePZ8TzPzbfOqMGJ_7qL00e7Qf8Kqi4ltO_edox3bIM-6chc0j1c1TqVviFgbNzUiOYSTIMT7Hy5imDxMw-OJNXcJhaa-aAPwIu7MZmmjcG3vdNdsxsgdVEgG69qnRRAl5SfZTbAHoHzhhSxysHzGeTwFz0mLHXD2fPr2tzMN01SjIjefsrYhv6w5UsO2h92ojNfmfsJWAzgHDX5EwjhoR8AuGYd6ZqFWr1dpe7aGSLyNKlL8h9EmG8rPub4J5R4RoFQ'
-    headers = {'Authorization': 'Bearer {}'.format(token), 'User-Agent': 'PostmanRuntime/7.26.5'}
+    username = settings.AUTH_TOKEN_USERNAME
+    password = settings.AUTH_TOKEN_PASSWORD
+    token = get_auth_token(username, password)
+    headers = {
+        'Authorization': 'Bearer {}'.format(token),
+        'User-Agent': 'PostmanRuntime/7.26.5'
+        }
     url = '{}programs/{}/members/{}'.format(endpoint, program_id, member_id)
     
     hirarchy_obj = requests.get(url, headers=headers)
@@ -61,7 +76,7 @@ def get_approval_value(rule_set, query_obj):
         for condition in rule["conditons"]:
             operand1 = ''
             operand2 = ''
-            
+
             operator = condition['operator']
             if condition['column'] in query_obj:
                 operand1 = query_obj[condition['column']]
@@ -84,9 +99,7 @@ def get_approval_value(rule_set, query_obj):
                     continue
                 else:
                     operand1 = role_obj['role']['name']
-            
-            flag = get_flag_value(operator, operand1, operand2)
-            
+            flag = get_flag_value(operator, operand1, operand2)     
             if not flag:
                 logger.info(
                     'No Rule set apply with the opertor {} and operands{}_{} provided'.format(
@@ -96,7 +109,6 @@ def get_approval_value(rule_set, query_obj):
                         )
                     )
                 break
-        print(flag)
         if flag:
             user_list = []
             for action in rule["actions"]:
@@ -139,7 +151,6 @@ def get_approval_value(rule_set, query_obj):
                     elif approver_level > 0:
                         for level in range(1, approver_level+1):
                             if level == 1:
-
                                 member_id = query_obj[approver_value]
                             else:
                                 member_id = supervisor_id
@@ -152,10 +163,8 @@ def get_approval_value(rule_set, query_obj):
                             except:
                                 logger.error("Problem fetching User:", member_id)
                                 break
-                            else:                              
+                            else:                          
                                 supervisor_id = user['supervisor_id']
                                 user_list.append(supervisor_id)
             
             return user_list
-
-
